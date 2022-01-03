@@ -227,6 +227,23 @@ func (d *Document) countPlaceholders(file string, placeholderMap PlaceholderMap)
 	return placeholderCount
 }
 
+// AllKeys returns all valid keys in text from all files.
+func (d *Document) AllValidKeys() [] string {
+	keys := make([] string, 0)
+	// Going through the files and their placeholders
+	for fileName, placeholders := range d.filePlaceholders {
+		for _, ph := range placeholders {
+			// If placeholder is valid then add
+			if ph.Valid() {
+				keys = append(keys, ph.Text(d.files[fileName]))
+			}
+			
+		}
+	}
+	return keys
+}
+
+
 // stripXmlTags is a stdlib way of stripping out all xml tags using the html.Tokenizer.
 // The returned string will be everything except the tags.
 func (d *Document) stripXmlTags(data string) string {
